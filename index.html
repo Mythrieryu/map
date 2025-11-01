@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <title>Hipotetyczne lokalizacje Atlantydy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    html,body,#map { height:100%; margin:0; padding:0; }
+    .legend { background: white; padding: 8px 10px; font: 14px/16px Arial, Helvetica, sans-serif; box-shadow: 0 0 12px rgba(0,0,0,0.2); border-radius:6px; }
+    .attribution { position: absolute; right: 8px; bottom: 8px; background: rgba(255,255,255,0.8); padding:4px 6px; font-size:12px; border-radius:4px;}
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div class="attribution">Map tiles © OpenStreetMap contributors</div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Init map
+    var map = L.map('map').setView([20, 0], 2);
+
+    // Basemap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: ''
+    }).addTo(map);
+
+    // Hypothetical Atlantis candidate points (lat, lon)
+    var candidates = [
+      {name: "Santorini (Thera)", coords: [36.4, 25.4], info: "<b>Santorini / Thera</b><br>Erupcja wulkanu ~1600 p.n.e.; teoria powiązana z kulturą minojską."},
+      {name: "Azory", coords: [38.5, -28], info: "<b>Azory</b><br>Hipoteza archipelagu w rejonie Azorów; spekulacje geologiczne."},
+      {name: "Cieśnina Gibraltarska", coords: [36.1, -5.6], info: "<b>Cieśnina Gibraltarska</b><br>Platon lokalizuje Atlantydę 'poza Słupami Heraklesa' — interpretacja geograficzna."},
+      {name: "Richat (Oko Sahary)", coords: [21.1, -11.4], info: "<b>Richat (Oko Sahary)</b><br>Unikatowa struktura; teoria popularna w internecie, kontrowersyjna naukowo."},
+      {name: "Bimini Road (Bahamy)", coords: [25.7, -79.3], info: "<b>Bimini Road</b><br>Formacje skalne przy Bahamach; debatowane: naturalne czy antropogeniczne."},
+      {name: "Region Kuby", coords: [21.5, -80], info: "<b>Kuba i okolice</b><br>Raporty o strukturach podwodnych; brak jednoznacznych dowodów na miasto."},
+      {name: "Sundaland", coords: [-5, 110], info: "<b>Sundaland</b><br>Obszar szelfu Sundy (SE Azja) – teoria o zatopionych kulturach na rozległym, dawnym lądzie."}
+    ];
+
+    // Add markers & popups
+    candidates.forEach(function(c){
+      var m = L.marker(c.coords).addTo(map);
+      m.bindPopup(c.info + "<br><em>Źródła: Platon, badania geologiczne i hipotezy archeologiczne.</em>");
+    });
+
+    // Legend control
+    var legend = L.control({position: 'bottomright'});
+    legend.onAdd = function(map) {
+      var div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = '<strong>Hipotezy lokalizacji Atlantydy</strong><br>'
+        + 'Kliknij marker, aby zobaczyć krótkie info.<br><br>'
+        + '<b>Santorini</b> – Thera / Minojczycy<br>'
+        + '<b>Gibraltar</b> – lokalizacja wg Platona<br>'
+        + '<b>Azory / Bimini / Richat / Sundaland</b> – alternatywne hipotezy';
+      return div;
+    };
+    legend.addTo(map);
+  </script>
+</body>
+</html>
